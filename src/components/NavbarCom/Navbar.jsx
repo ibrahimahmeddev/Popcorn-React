@@ -6,7 +6,7 @@ function Navbar({ children }) {
   return (
     <nav className="nav-bar">
       <NavLogo />
-      <NavSearch />
+      {/* <NavSearch /> */}
       {children}
     </nav>
   );
