@@ -45,10 +45,24 @@ function MovieDetails({
       runtime: Number(runtime.split(" ").at(0)),
       userRating,
     };
-
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   };
+
+  useEffect(() => {
+    function callBack(e) {
+      if (e.code === "Escape") {
+        onCloseMovie();
+        console.log("CLOSING");
+      }
+    }
+
+    document.addEventListener("keydown", callBack);
+
+    return function () {
+      document.removeEventListener("keydown", callBack);
+    };
+  }, []);
 
   useEffect(() => {
     async function getMovieDetails() {
@@ -62,6 +76,15 @@ function MovieDetails({
     }
     getMovieDetails();
   }, [selectedMovieId]);
+
+  useEffect(() => {
+    if (!title) return;
+    document.title = `Movie | ${title}`;
+
+    return function () {
+      document.title = "Popcorn";
+    };
+  }, [title]);
 
   return (
     <div className="details">
