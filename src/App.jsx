@@ -9,8 +9,8 @@ import Main from "./components/Maincom/Main";
 import Box from "./components/Maincom/Box/Box";
 import Loader from "./components/Loader/Loader";
 import NavSearch from "./components/NavbarCom/NavSearch";
-
 import ErrorMessage from "./components/Error/ErrorMessage";
+import MovieDetails from "./components/SelectedMovie/SelectedMovie";
 
 const tempMovieData = [
   {
@@ -60,7 +60,6 @@ const tempWatchedData = [
 ];
 
 const KEY = "651687b7";
-// const query = "the dark knight";
 
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
@@ -68,12 +67,25 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [errorM, setError] = useState("");
+  const [selectedMovieId, setSelectedMovieId] = useState(null);
+
   const handleSearch = (setquery) => {
     setQuery(setquery);
   };
 
+  const handleSelectedMovie = (id) => {
+    setSelectedMovieId((selectedMovieId) =>
+      id === selectedMovieId ? null : id
+    );
+  };
+
+  const handleCloseMovie = () => {
+    setSelectedMovieId(null);
+  };
+
   useEffect(() => {
     setIsLoading(true);
+
     async function searchMovies() {
       try {
         const res = await fetch(
@@ -84,11 +96,16 @@ export default function App() {
 
         if (data.Response === "False") throw new Error("Movie Not Found!");
         setMovies(data.Search);
+        console.log(movies);
         setError("");
       } catch (error) {
         setError(error.message);
       } finally {
         setIsLoading(false);
+      }
+      if (query.length < 3) {
+        setMovies([]);
+        setError("");
       }
     }
     searchMovies();
@@ -104,11 +121,25 @@ export default function App() {
         <Box>
           {isLoading && <Loader />}
           {errorM && <ErrorMessage message={errorM} />}
-          {!isLoading && !errorM && <ListMovies movies={movies} />}
+          {!isLoading && !errorM && (
+            <ListMovies
+              movies={movies}
+              handleSelectedMovie={handleSelectedMovie}
+            />
+          )}
         </Box>
         <Box>
-          <WatchSummary watched={watched} />
-          <ListWatch watched={watched} />
+          {selectedMovieId ? (
+            <MovieDetails
+              selectedMovieId={selectedMovieId}
+              onCloseMovie={handleCloseMovie}
+            />
+          ) : (
+            <>
+              <WatchSummary watched={watched} />
+              <ListWatch watched={watched} />
+            </>
+          )}
         </Box>
       </Main>
     </>

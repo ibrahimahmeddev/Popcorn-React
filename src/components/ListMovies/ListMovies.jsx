@@ -1,8 +1,11 @@
-function ListMovies({ movies }) {
+function ListMovies({ movies, handleSelectedMovie }) {
   return (
     <ul className="list">
       {movies?.map((movie) => (
-        <li key={movie.imdbID}>
+        <li
+          key={movie.imdbID}
+          onClick={() => handleSelectedMovie(movie.imdbID)}
+        >
           <img src={movie.Poster} alt={`${movie.Title} poster`} />
           <h3>{movie.Title}</h3>
           <div>
