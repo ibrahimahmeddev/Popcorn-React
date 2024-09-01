@@ -9,12 +9,18 @@ const containerStyle = {
 
 const starContainerStyle = { display: "flex", gap: "2px", cursor: "pointer" };
 
-function Stars({ maxRating = 5, color = "#fcc419", size = "48" }) {
+function Stars({
+  maxRating = 5,
+  color = "#fcc419",
+  size = "48",
+  setUserRating,
+}) {
   const [rating, setRating] = useState(0);
   const [tempRating, setTempRating] = useState(0);
 
   const handleRate = (rate) => {
     setRating(rate);
+    setUserRating(rate);
   };
 
   const textStyle = {

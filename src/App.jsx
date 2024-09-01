@@ -63,11 +63,21 @@ const KEY = "651687b7";
 
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [errorM, setError] = useState("");
   const [selectedMovieId, setSelectedMovieId] = useState(null);
+
+  const handleDelelteMovie = (id) => {
+    let filterWatched = watched.filter((watch) => watch.imdbID !== id);
+    setWatched(filterWatched);
+  };
+
+  const handleAddWatched = (movie) => {
+    setWatched((watched) => [...watched, movie]);
+    console.log(movie);
+  };
 
   const handleSearch = (setquery) => {
     setQuery(setquery);
@@ -133,11 +143,16 @@ export default function App() {
             <MovieDetails
               selectedMovieId={selectedMovieId}
               onCloseMovie={handleCloseMovie}
+              onAddWatched={handleAddWatched}
+              watched={watched}
             />
           ) : (
             <>
               <WatchSummary watched={watched} />
-              <ListWatch watched={watched} />
+              <ListWatch
+                watched={watched}
+                onDelelteMovie={handleDelelteMovie}
+              />
             </>
           )}
         </Box>
