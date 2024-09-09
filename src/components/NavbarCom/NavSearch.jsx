@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useRef } from "react";
+import { useKey } from "../../customHooks/useKey";
 
-function NavSearch({ handleSearch, query }) {
+function NavSearch({ handleSearch, setQuery }) {
+  const inputEl = useRef(null);
+
+  useKey("Enter", function () {
+    if (document.activeElement === inputEl.current) return;
+    setQuery("");
+    inputEl.current.focus();
+  });
+
   return (
     <input
       className="search"
       type="text"
       placeholder="Search movies..."
-      // value={query}
       onChange={(e) => handleSearch(e.target.value)}
+      ref={inputEl}
     />
   );
 }

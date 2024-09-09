@@ -62,7 +62,7 @@ function MovieDetails({
     return function () {
       document.removeEventListener("keydown", callBack);
     };
-  }, []);
+  }, [onCloseMovie]);
 
   useEffect(() => {
     async function getMovieDetails() {
